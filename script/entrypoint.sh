@@ -1,16 +1,16 @@
 #!/usr/bin/env bash
 
-TRY_LOOP="20"
+TRY_LOOP="5"
 
 : "${REDIS_HOST:="redis"}"
 : "${REDIS_PORT:="6379"}"
 : "${REDIS_PASSWORD:=""}"
 
-: "${POSTGRES_HOST:="postgres"}"
-: "${POSTGRES_PORT:="5432"}"
-: "${POSTGRES_USER:="airflow"}"
-: "${POSTGRES_PASSWORD:="airflow"}"
-: "${POSTGRES_DB:="airflow"}"
+: "${POSTGRES_HOST:=$AIRFLOW_POSTGRES_HOST}"
+: "${POSTGRES_PORT:=$AIRFLOW_POSTGRES_PORT}"
+: "${POSTGRES_USER:=$AIRFLOW_POSTGRES_USER}"
+: "${POSTGRES_PASSWORD:=$AIRFLOW_POSTGRES_PASSWORD}"
+: "${POSTGRES_DB:=$AIRFLOW_POSTGRES_DB}"
 
 # Defaults and back-compat
 : "${AIRFLOW__CORE__FERNET_KEY:=${FERNET_KEY:=$(python -c "from cryptography.fernet import Fernet; FERNET_KEY = Fernet.generate_key().decode(); print(FERNET_KEY)")}}"

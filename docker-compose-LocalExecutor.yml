@@ -1,29 +1,44 @@
-version: '2.1'
-services:
-    postgres:
-        image: postgres:9.6
-        environment:
-            - POSTGRES_USER=airflow
-            - POSTGRES_PASSWORD=airflow
-            - POSTGRES_DB=airflow
+#postgres:
+#    image: postgres:9.6
+#    environment:
+#        - POSTGRES_USER=mobi
+#        - POSTGRES_PASSWORD=localdev
+#        - POSTGRES_DB=mobi
+#
 
-    webserver:
-        image: puckel/docker-airflow:1.10.2
-        restart: always
-        depends_on:
-            - postgres
-        environment:
-            - LOAD_EX=n
-            - EXECUTOR=Local
-        volumes:
-            - ./dags:/usr/local/airflow/dags
-            # Uncomment to include custom plugins
-            # - ./plugins:/usr/local/airflow/plugins
-        ports:
-            - "8080:8080"
-        command: webserver
-        healthcheck:
-            test: ["CMD-SHELL", "[ -f /usr/local/airflow/airflow-webserver.pid ]"]
-            interval: 30s
-            timeout: 30s
-            retries: 3
+dbm:
+  # Keep the version consistent with RDS
+  image: postgres:9.5.2
+  container_name: dbm
+  ports:
+    # For easy data query from the host
+    - 5432:5432
+  volumes:
+    # Persist the data to /mnt/sda1 on the docker-machine host to survive
+    # `docker-compose rm` and VM restart.
+    - /mnt/sda1/mobi-devdb:/var/lib/postgresql/data
+  environment:
+    POSTGRES_USER: mobi
+    POSTGRES_PASSWORD: localdev
+
+
+webserver:
+    image: mobi/airflow
+    links:
+        - dbm:dbm.service
+    environment:
+        - LOAD_EX=n
+        - EXECUTOR=Local
+        - AIRFLOW_POSTGRES_HOST=dbm.service
+        - AIRFLOW_POSTGRES_PORT=5432
+        - AIRFLOW_POSTGRES_USER=mobi
+        - AIRFLOW_POSTGRES_PASSWORD=localdev
+        - AIRFLOW_POSTGRES_DB=mobi
+    volumes:
+        - ./dags:/usr/local/airflow/dags
+        - ./script/entrypoint.sh:/entrypoint.sh
+        # Uncomment to include custom plugins
+        # - ./plugins:/usr/local/airflow/plugins
+    ports:
+        - "8080:8080"
+    command: webserver

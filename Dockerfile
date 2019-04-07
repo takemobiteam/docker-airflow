@@ -1,11 +1,7 @@
-# VERSION 1.10.2
-# AUTHOR: Matthieu "Puckel_" Roisil
+#!IMAGE mobi/airflow
 # DESCRIPTION: Basic Airflow container
-# BUILD: docker build --rm -t puckel/docker-airflow .
-# SOURCE: https://github.com/puckel/docker-airflow
 
 FROM python:3.6-slim
-LABEL maintainer="Puckel_"
 
 # Never prompts the user for choices on installation/configuration of packages
 ENV DEBIAN_FRONTEND noninteractive
@@ -32,13 +28,13 @@ RUN set -ex \
         libsasl2-dev \
         libssl-dev \
         libffi-dev \
-        libpq-dev \
         git \
     ' \
     && apt-get update -yqq \
     && apt-get upgrade -yqq \
     && apt-get install -yqq --no-install-recommends \
         $buildDeps \
+        libpq-dev \
         freetds-bin \
         build-essential \
         default-libmysqlclient-dev \
@@ -47,6 +43,7 @@ RUN set -ex \
         rsync \
         netcat \
         locales \
+        sudo \
     && sed -i 's/^# en_US.UTF-8 UTF-8$/en_US.UTF-8 UTF-8/g' /etc/locale.gen \
     && locale-gen \
     && update-locale LANG=en_US.UTF-8 LC_ALL=en_US.UTF-8 \
