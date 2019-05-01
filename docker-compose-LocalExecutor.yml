@@ -1,10 +1,3 @@
-#postgres:
-#    image: postgres:9.6
-#    environment:
-#        - POSTGRES_USER=mobi
-#        - POSTGRES_PASSWORD=localdev
-#        - POSTGRES_DB=mobi
-#
 
 dbm:
   # Keep the version consistent with RDS
@@ -34,6 +27,11 @@ webserver:
         - AIRFLOW_POSTGRES_USER=mobi
         - AIRFLOW_POSTGRES_PASSWORD=localdev
         - AIRFLOW_POSTGRES_DB=mobi
+#        - AIRFLOW_POSTGRES_HOST=airflow.cwat6ya45bkl.us-east-1.rds.amazonaws.com
+#        - AIRFLOW_POSTGRES_PORT=5432
+#        - AIRFLOW_POSTGRES_USER=mobi
+#        - AIRFLOW_POSTGRES_PASSWORD=3=vjQ-vsGYg86
+#        - AIRFLOW_POSTGRES_DB=mobi
     volumes:
         - ./dags:/usr/local/airflow/dags
         - ./script/entrypoint.sh:/entrypoint.sh
