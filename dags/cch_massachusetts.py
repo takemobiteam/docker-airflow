@@ -31,7 +31,7 @@ containerOverrides={
     'environment': [
         {
             'name': 'CCH_AWS_S3_OBJECT_PREFIX',
-            'value': 'maps/massachusetts-ch/'
+            'value': 'maps/'
         },
         {
             'name': 'MAP_URL',
