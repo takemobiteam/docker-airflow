@@ -5,6 +5,7 @@ from airflow import DAG
 from airflow.operators.bash_operator import BashOperator
 from airflow.contrib.operators.awsbatch_operator import AWSBatchOperator
 from datetime import datetime, timedelta
+import os
 
 default_args = {
     "owner": "airflow",
@@ -39,7 +40,7 @@ containerOverrides={
         },
         {
             'name': 'BATCH_AWS_ACCESS_KEY_ID',
-            'value': 'AKIAINCVZSL7U3PVBHUA'
+            'value': os.environ['BATCH_AWS_ACCESS_KEY_ID']
         },
         {
             'name': 'CCH_AWS_S3_BUCKET',
@@ -51,7 +52,7 @@ containerOverrides={
         },
         {
             'name': 'BATCH_AWS_SECRET_ACCESS_KEY',
-            'value': 'DI9SPRWYLxNvhQJdISydNmD2xczoUIKp0olHYON6'
+            'value': os.environ['BATCH_AWS_SECRET_ACCESS_KEY']
         },
     ],
 }
